@@ -504,37 +504,44 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
         ),
       );
     }
-    return FractionalTranslation(
-            translation: Offset(0.0, contentFractionalOffset as double),
-            child: ToolTipSlideTransition(
-              position: Tween<Offset>(
-                begin: Offset.zero,
-                end: Offset(
-                  0,
-                  widget.toolTipSlideEndDistance * contentOffsetMultiplier,
+    return Padding(
+      padding: EdgeInsets.only(
+        right: _getSpace(),
+        left: _getSpace(),
+        top: contentY - (10 * contentOffsetMultiplier),
+      ),
+      child: FractionalTranslation(
+        translation: Offset(0.0, contentFractionalOffset as double),
+        child: ToolTipSlideTransition(
+          position: Tween<Offset>(
+            begin: Offset.zero,
+            end: Offset(
+              0,
+              widget.toolTipSlideEndDistance * contentOffsetMultiplier,
+            ),
+          ).animate(_movingAnimation),
+          child: Material(
+            color: Colors.transparent,
+            child: GestureDetector(
+              onTap: widget.onTooltipTap,
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: paddingTop,
+                  bottom: paddingBottom,
                 ),
-              ).animate(_movingAnimation),
-              child: Material(
                 color: Colors.transparent,
-                child: GestureDetector(
-                  onTap: widget.onTooltipTap,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      top: paddingTop,
-                      bottom: paddingBottom,
-                    ),
-                    color: Colors.transparent,
-                    child: Center(
-                      child: MeasureSize(
-                        onSizeChange: onSizeChange,
-                        child: widget.container,
-                      ),
-                    ),
+                child: Center(
+                  child: MeasureSize(
+                    onSizeChange: onSizeChange,
+                    child: widget.container,
                   ),
                 ),
               ),
             ),
-          );
+          ),
+        ),
+      ),
+    );
   }
 
   void onSizeChange(Size? size) {
