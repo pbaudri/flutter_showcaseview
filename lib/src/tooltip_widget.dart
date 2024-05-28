@@ -504,13 +504,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
         ),
       );
     }
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          right: _getSpace(),
-          left: _getSpace(),
-          top: contentY - (10 * contentOffsetMultiplier),
-          child: FractionalTranslation(
+    return FractionalTranslation(
             translation: Offset(0.0, contentFractionalOffset as double),
             child: ToolTipSlideTransition(
               position: Tween<Offset>(
@@ -540,10 +534,7 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
                 ),
               ),
             ),
-          ),
-        ),
-      ],
-    );
+          );
   }
 
   void onSizeChange(Size? size) {
