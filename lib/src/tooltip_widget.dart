@@ -65,6 +65,7 @@ class ToolTipWidget extends StatefulWidget {
   final TextDirection? titleTextDirection;
   final TextDirection? descriptionTextDirection;
   final double toolTipSlideEndDistance;
+  final Alignment toolTipAlignment;
 
   const ToolTipWidget({
     Key? key,
@@ -99,6 +100,7 @@ class ToolTipWidget extends StatefulWidget {
     this.titleTextDirection,
     this.descriptionTextDirection,
     this.toolTipSlideEndDistance = 7,
+    this.toolTipAlignment = Alignment.center,
   }) : super(key: key);
 
   @override
@@ -504,43 +506,44 @@ class _ToolTipWidgetState extends State<ToolTipWidget>
         ),
       );
     }
-    return Padding(
-      padding: EdgeInsets.only(
-        right: _getSpace(),
-        left: _getSpace(),
-        top: contentY - (10 * contentOffsetMultiplier),
-      ),
-      child: FractionalTranslation(
-        translation: Offset(0.0, contentFractionalOffset as double),
-        child: ToolTipSlideTransition(
-          position: Tween<Offset>(
-            begin: Offset.zero,
-            end: Offset(
-              0,
-              widget.toolTipSlideEndDistance * contentOffsetMultiplier,
-            ),
-          ).animate(_movingAnimation),
-          child: Material(
-            color: Colors.transparent,
-            child: GestureDetector(
-              onTap: widget.onTooltipTap,
-              child: Container(
-                padding: EdgeInsets.only(
-                  top: paddingTop,
-                  bottom: paddingBottom,
+    return Stack(
+      alignment: widget.toolTipAlignment,
+      children: <Widget>[
+        Positioned(
+          top: contentY - (10 * contentOffsetMultiplier),
+          child: FractionalTranslation(
+            translation: Offset(0.0, contentFractionalOffset as double),
+            child: ToolTipSlideTransition(
+              position: Tween<Offset>(
+                begin: Offset.zero,
+                end: Offset(
+                  0,
+                  widget.toolTipSlideEndDistance * contentOffsetMultiplier,
                 ),
+              ).animate(_movingAnimation),
+              child: Material(
                 color: Colors.transparent,
-                child: Center(
-                  child: MeasureSize(
-                    onSizeChange: onSizeChange,
-                    child: widget.container,
+                child: GestureDetector(
+                  onTap: widget.onTooltipTap,
+                  child: Container(
+                    padding: EdgeInsets.only(
+                      top: paddingTop,
+                      bottom: paddingBottom,
+                    ),
+                    color: Colors.transparent,
+                    child: Center(
+                      child: MeasureSize(
+                        onSizeChange: onSizeChange,
+                        child: widget.container,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 
